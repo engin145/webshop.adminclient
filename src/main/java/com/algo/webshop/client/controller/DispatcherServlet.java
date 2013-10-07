@@ -11,5 +11,10 @@ public class DispatcherServlet{
 		return "index";
 	}
 	
+	@RequestMapping("good")
+	public String good(){
+		return "good";
+	}
+	
 	
 }
