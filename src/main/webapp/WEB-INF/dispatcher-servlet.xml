@@ -8,10 +8,11 @@
         http://www.springframework.org/schema/context/spring-context-3.0.xsd">
     
     <context:annotation-config /> 
-	<context:component-scan base-package="com.algo.webshop.client.controller" />
+	<context:component-scan base-package="com.algo.webshop.adminclient.controller" />
  
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="contentType" value="text/html;charset=UTF-8" />
 		<property name="prefix">
 			<value>/WEB-INF/pages/</value>
 		</property>

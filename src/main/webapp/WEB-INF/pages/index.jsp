@@ -9,13 +9,14 @@
 <body>
 	<table border="1" width="95%" align="center">
 		<tr>
-			<td colspan="4" align="center"><h2>Администрирование</h2></td>
+			<td colspan="5" align="center"><h2>Администрирование</h2></td>
 		</tr>
 		<tr align="center">
-			<td><a href="good">Goods</a></td>
-			<td><a href="category">Categorys</a></td>
-			<td><a href="client">Clients</a></td>
-			<td><a href="manager">Managers</a></td>
+			<td width="21%"><a href="good">Товары</a></td>
+			<td width="21%"><a href="order">Заказы</a></td>
+			<td width="21%"><a href="category">Категории</a></td>
+			<td width="21%"><a href="client">Клиенты</a></td>
+			<td width="21%"><a href="manager">Менеджеры</a></td>
 		</tr>
 	</table>
 </body>
