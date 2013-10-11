@@ -61,7 +61,8 @@
 
 	<table border="1">
 		<tr>
-			<td colspan="3">Имя новой категории: <input type="text" name="name" id="newCat"></td>
+			<td colspan="3">Имя новой категории: <input type="text"
+				name="name" id="newCat"></td>
 			<td align="center"><input type="button" onclick="add()"
 				value="Add"></td>
 		</tr>
@@ -75,7 +76,7 @@
 			<td align="center">Новое название</td>
 			<td></td>
 		</tr>
-		
+
 		<c:forEach var="category" items="${categoryList}">
 			<tr>
 				<td>${category.id}</td>
@@ -83,8 +84,12 @@
 				<td><input type="text" name="newName" id="${category.id}">
 					<input type="button" onclick="rename(${category.id})"
 					value="Rename" /></td>
-				<td><input type="button" onclick="del(${category.id})"
-					value="Delete" /></td>
+				<td><form action="deleteCategory" method="post">
+						<p>
+							<input type="text" name="id">
+						</p>
+						<input type="submit" value="ok">
+					</form> <!-- <input type="button" onclick="del(${category.id})" value="Delete" />  --></td>
 			</tr>
 		</c:forEach>
 	</table>

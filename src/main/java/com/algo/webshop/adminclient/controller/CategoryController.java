@@ -2,6 +2,8 @@ package com.algo.webshop.adminclient.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -23,11 +25,11 @@ public class CategoryController {
 		this.service = service;
 	}
 
-	@RequestMapping("category")
-	public ModelAndView category(Model model) {
+	@RequestMapping("categoryStart")
+	public ModelAndView categoryStart(Model model) {
 		List<Category> categoryList = service.getCategorys();
 		model.addAttribute("categoryList", categoryList);
-		System.out.println("CategoryController.category()");
+		System.out.println("CategoryController.categoryStart()");
 		return new ModelAndView("category");
 	}
 
@@ -44,8 +46,9 @@ public class CategoryController {
 	}
 
 	@RequestMapping("deleteCategory")
-	public ModelAndView delCategory(Model model,
-			@RequestParam("categoryId") int categoryId) {
+	public ModelAndView delCategory(Model model,HttpServletRequest request) {
+		String id = request.getParameter("id");
+		int categoryId = Integer.parseInt(id);
 		service.delCategory(categoryId);
 		List<Category> categoryList = service.getCategorys();
 		model.addAttribute("categoryList", categoryList);
