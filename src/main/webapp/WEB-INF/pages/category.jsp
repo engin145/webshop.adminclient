@@ -10,46 +10,145 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Администрирование категорий</title>
+
+<script type="text/JavaScript"
+	src="${pageContext.request.contextPath}/resources/js/jquery-1.10.2.js">
+	
+</script>
+<script type="text/JavaScript"
+	src="${pageContext.request.contextPath}/resources/js/jquery.json-2.2.js">
+	
+</script>
+
+<script type="text/javascript">
+	var list = [];
+
+	function copyArray(l) {
+		for ( var i = 0; i < l.length; i++) {
+			list[i] = {
+				id : l[i].id,
+				name : l[i].name
+			};
+		}
+	}
+
+	function tableOut(list) {
+		var out = document.getElementById("dynamic");
+		var content;
+		// add
+		content = '<table border="1" align = "center">\
+			<tr>\
+				<td colspan="3">Имя новой категории: <input type="text" name="name" id="newCat"></td>\
+				<td align="center"><input type="button" onclick="add()" value="Add"></td>\
+			</tr>\
+			<tr><td colspan="4">|</td></tr>';
+		// table header
+		content = content
+				+ '<tr>\
+				<td align="center">id</td>\
+				<td align="center">Название</td>\
+				<td align="center">Новое название</td>\
+				<td></td>\
+			</tr>';
+		// content
+		for ( var i = 0; i < list.length; i++) {
+			content += '<tr>';
+			content += '<td>';
+			content += list[i].id;
+			content += '</td><td>';
+			content += list[i].name;
+			content += '</td>\
+				<td><input type="text" name="newName" id="';
+				content += list[i].id;
+				content += '"><input type="button" onclick="rename(';
+			content += list[i].id + ', ' + i;
+			content += ')" value="Rename" /></td>\
+				<td><input type="button" onclick="del(';
+			content += list[i].id + ', ' + i;
+			content += ')" value="Delete" /></td></tr>';
+		}
+		content = content + '</table>';
+		out.innerHTML = content;
+	}
+
+	function add() {
+		var newCategory = document.getElementById('newCat').value;
+		$.ajax({
+			url : 'addCategory',
+			type : 'POST',
+			dataType : 'text',
+			data : "name=" + newCategory,
+			success : function(idNew) {
+				if (idNew > 0) {
+					list.push({
+						id : idNew,
+						name : newCategory
+					});
+					tableOut(list);
+				}
+			},
+			error : function(e) {
+				alert("error" + e);
+			}
+		});
+	}
+
+	function rename(categoryId, index) {
+		var newName = document.getElementById(categoryId).value;
+		$.ajax({
+			url : 'renameCategory',
+			type : 'POST',
+			dataType : 'text',
+			data : "id=" + categoryId + "&name=" + newName,
+			success : function(confirm) {
+				if (confirm = 1) {
+					list[index].name=newName;
+					tableOut(list);
+				}
+			},
+			error : function(e) {
+				alert("error" + e);
+			}
+		});
+	}
+
+	function del(categoryId, index) {
+		$.ajax({
+			url : 'deleteCategory',
+			type : 'POST',
+			dataType : 'text',
+			data : "id=" + categoryId,
+			success : function(confirm) {
+				if (confirm = 1) {
+					list.splice(index, 1);
+					tableOut(list);
+				}
+			},
+			error : function(e) {
+				alert("error" + e);
+			}
+		});
+	}
+
+	function doRequest() {
+		$.ajax({
+			url : 'getCategorys',
+			type : 'POST',
+			dataType : 'json',
+			async : 'false',
+			success : function(data) {
+				tableOut(data.categoryList);
+				copyArray(data.categoryList);
+			},
+			error : function(e) {
+				alert("error" + e);
+			}
+		});
+	}
+</script>
 </head>
 
 <body>
-
-	<script type="text/javascript">
-	function add() {
-		var xmlhttp;
-		var newCategory = document.getElementById('newCat').value;
-		xmlhttp = new XMLHttpRequest();
-		xmlhttp.open("POST", "addCategory", true);
-		//alert(newName);
-		xmlhttp.setRequestHeader("Content-type",
-				"application/x-www-form-urlencoded");
-		xmlhttp.send("nameCategory=" + newCategory);
-		window.location.reload();
-	}
-	
-	function rename(categoryId) {
-		var xmlhttp;
-		var newName = document.getElementById(categoryId).value;
-		xmlhttp = new XMLHttpRequest();
-		xmlhttp.open("POST", "renameCategory", true);
-		//alert(newName);
-		xmlhttp.setRequestHeader("Content-type",
-				"application/x-www-form-urlencoded");
-		xmlhttp.send("categoryId=" + categoryId + "&categoryName=" + newName);
-		window.location.reload();
-	}
-	
-	function del(categoryId) {
-		var xmlhttp;
-		xmlhttp = new XMLHttpRequest();
-		xmlhttp.open("POST", "deleteCategory", true);
-		xmlhttp.setRequestHeader("Content-type",
-				"application/x-www-form-urlencoded");
-		xmlhttp.send("categoryId=" + categoryId);
-		window.location.reload();
-	}
-	
-</script>
 
 	<table border="0" width="96%" align="center">
 		<tr>
@@ -59,40 +158,11 @@
 		</tr>
 	</table>
 
-	<table border="1">
-		<tr>
-			<td colspan="3">Имя новой категории: <input type="text"
-				name="name" id="newCat"></td>
-			<td align="center"><input type="button" onclick="add()"
-				value="Add"></td>
-		</tr>
+	<div id="dynamic"></div>
+	<script>
+		doRequest();
+	</script>
 
-		<tr>
-			<td colspan="4">|</td>
-		</tr>
-		<tr>
-			<td align="center">id</td>
-			<td align="center">Название</td>
-			<td align="center">Новое название</td>
-			<td></td>
-		</tr>
-
-		<c:forEach var="category" items="${categoryList}">
-			<tr>
-				<td>${category.id}</td>
-				<td>${category.name}</td>
-				<td><input type="text" name="newName" id="${category.id}">
-					<input type="button" onclick="rename(${category.id})"
-					value="Rename" /></td>
-				<td><form action="deleteCategory" method="post">
-						<p>
-							<input type="text" name="id">
-						</p>
-						<input type="submit" value="ok">
-					</form> <!-- <input type="button" onclick="del(${category.id})" value="Delete" />  --></td>
-			</tr>
-		</c:forEach>
-	</table>
 
 </body>
 </html>
