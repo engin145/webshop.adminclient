@@ -119,7 +119,7 @@
 			dataType : 'text',
 			data : "id=" + categoryId,
 			success : function(confirm) {
-				if (confirm = 1) {
+				if (confirm == 1) {
 					list.splice(index, 1);
 					tableOut(list);
 				}

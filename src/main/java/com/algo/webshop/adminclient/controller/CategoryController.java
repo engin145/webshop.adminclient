@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.algo.webshop.adminclient.category.Categorys;
 import com.algo.webshop.common.domain.Category;
 import com.algo.webshop.common.domainimpl.ICategory;
 
