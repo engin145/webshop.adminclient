@@ -32,7 +32,7 @@ public class OrderController {
 			@RequestParam("confirm_status") int confirmStatus,
 			@RequestParam("cansel_status") int canselStatus) {
 		List<Order> list = serviceOrder.getOrders(confirmStatus, canselStatus);
-		System.out.println(list);
+		
 		return "orders";
 	}
 }
