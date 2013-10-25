@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -7,6 +8,7 @@
 <title>Заказы</title>
 </head>
 <body>
+	<a href="<c:url value="/j_spring_security_logout"/>">Logout</a>
 	<form action="orders" method="post"
 		style="margin: 0 auto; padding: 30px; width: 300px; border: 1px solid #000;">
 		<p>
