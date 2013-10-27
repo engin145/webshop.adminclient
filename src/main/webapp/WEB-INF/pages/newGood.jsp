@@ -26,7 +26,6 @@ select {
 </script>
 
 <script type="text/javascript">
-	//var emptyField = 0;
 
 	function verify() {
 		var emptyField = 0;
@@ -40,8 +39,8 @@ select {
 		var price = $("#priceGood").val();
 		var description = $("#descriptionGood").val();
 		var fullDescription = $("#fullDescriptionGood").val();
+		
 		// проверка
-
 		var elemCat = document.getElementById("notCategory");
 		if (category == 0) {
 			elemCat.innerHTML = "Выберите категорию!";
