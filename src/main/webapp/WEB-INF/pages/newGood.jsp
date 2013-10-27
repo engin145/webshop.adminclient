@@ -100,6 +100,7 @@ select {
 
 </head>
 <body>
+	<a href="<c:url value="/j_spring_security_logout"/>">Logout</a>
 	<table border="0" width="96%" align="center">
 		<tr>
 			<td><a href="index">На главную</a></td>

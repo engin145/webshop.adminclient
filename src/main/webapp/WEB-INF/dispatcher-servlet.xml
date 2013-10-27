@@ -34,6 +34,13 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
 			value="http://127.0.0.1:8081/webshop.server-1.0/remoting/UserService" />
 		<property name="serviceInterface" value="com.algo.webshop.common.domainimpl.IUser" />
 	</bean>
+	
+	<bean id="userSystemService"
+		class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
+		<property name="serviceUrl"
+			value="http://127.0.0.1:8081/webshop.server-1.0/remoting/UserSystemService" />
+		<property name="serviceInterface" value="com.algo.webshop.common.domainimpl.IUserSystem" />
+	</bean>
 
 	<bean id="goodService"
 		class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
@@ -42,27 +49,35 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
 		<property name="serviceInterface" value="com.algo.webshop.common.domainimpl.IGood" />
 	</bean>
 
+	<bean id="orderService"
+		class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
+		<property name="serviceUrl"
+			value="http://127.0.0.1:8081/webshop.server-1.0/remoting/OrderService" />
+		<property name="serviceInterface" value="com.algo.webshop.common.domainimpl.IOrder" />
+	</bean>
+
 	<bean id="categoryService"
 		class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
 		<property name="serviceUrl"
 			value="http://127.0.0.1:8081/webshop.server-1.0/remoting/CategoryService" />
 		<property name="serviceInterface" value="com.algo.webshop.common.domainimpl.ICategory" />
 	</bean>
-	
+
 	<bean id="manufacturerService"
 		class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
 		<property name="serviceUrl"
 			value="http://127.0.0.1:8081/webshop.server-1.0/remoting/ManufacturerService" />
-		<property name="serviceInterface" value="com.algo.webshop.common.domainimpl.IManufacturer" />
+		<property name="serviceInterface"
+			value="com.algo.webshop.common.domainimpl.IManufacturer" />
 	</bean>
-	
+
 	<bean id="unitService"
 		class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
 		<property name="serviceUrl"
 			value="http://127.0.0.1:8081/webshop.server-1.0/remoting/UnitService" />
 		<property name="serviceInterface" value="com.algo.webshop.common.domainimpl.IUnit" />
 	</bean>
-	
+
 	<bean id="priceService"
 		class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
 		<property name="serviceUrl"
