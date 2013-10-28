@@ -1,25 +1,49 @@
 package com.algo.webshop.adminclient.controller;
 
+import java.sql.Date;
+import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.algo.webshop.common.domain.Good;
+import com.algo.webshop.common.domain.GoodsList;
 import com.algo.webshop.common.domain.Order;
+import com.algo.webshop.common.domain.Position;
+import com.algo.webshop.common.domain.Price;
 import com.algo.webshop.common.domainimpl.IOrder;
+import com.algo.webshop.common.domainimpl.IOrderGood;
+import com.algo.webshop.common.domainimpl.IPrice;
 
 @Controller
 public class OrderController {
 
 	private IOrder serviceOrder;
+	private IOrderGood serviceOrderGood;
+	private IPrice servicePrice;
 
 	@Autowired
 	public void setOrderService(@Qualifier("orderService") IOrder service) {
 		this.serviceOrder = service;
+	}
+
+	@Autowired
+	public void setOrderGoodService(
+			@Qualifier("orderGoodService") IOrderGood service) {
+		this.serviceOrderGood = service;
+	}
+
+	@Autowired
+	public void setPriceService(@Qualifier("priceService") IPrice service) {
+		this.servicePrice = service;
 	}
 
 	@RequestMapping(value = "/order")
@@ -27,12 +51,13 @@ public class OrderController {
 		return "order";
 	}
 
-	@RequestMapping(value = "/orders")
-	public String showOrders(Model model, @RequestParam("date") int date,
+	@RequestMapping(value = "/orders", method = RequestMethod.POST)
+	public String showOrders2(Model model, @RequestParam("date") int date,
 			@RequestParam("confirm_status") int confirmStatus,
 			@RequestParam("cansel_status") int canselStatus) {
-		List<Order> list = serviceOrder.getOrders(confirmStatus, canselStatus);
-		
+		List<Order> orderList = serviceOrder.getOrders(confirmStatus,
+				canselStatus);
+		model.addAttribute("orderList", orderList);
 		return "orders";
 	}
 }
