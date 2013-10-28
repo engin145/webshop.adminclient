@@ -130,6 +130,7 @@ public class GoodController {
 
 	@RequestMapping("newGood")
 	public ModelAndView newGood(Model model) {
+		//System.out.println("GoodController.newGood()");
 		List<Category> categoryList = serviceCategory.getCategorys();
 		Map<Integer, String> categoryMap = new HashMap<Integer, String>();
 		for (Category category : categoryList) {
@@ -193,19 +194,56 @@ public class GoodController {
 		Integer confirm = serviceGood.removeGood(Integer.parseInt(id));
 		return confirm.toString();
 	}
-
-	@RequestMapping(value = "/editGood", method = RequestMethod.POST)
-	public ModelAndView editGood(Model model, @RequestParam String id) {
-		int idGood = Integer.parseInt(id);
-		Good good = serviceGood.getGood(idGood);
-		String longDescroption = serviceGood.getLongDescription(idGood);
-		Price price = servicePrice.getMaxDatePriceByOneGood(idGood);
-		GoodFull goodFull = new GoodFull(good, price.getValue(), longDescroption);
-		model.addAttribute("good", goodFull);
-		
-		System.out.println(goodFull.getName()+goodFull.getPrice());
-
-		return new ModelAndView("newGood");
+	
+	@RequestMapping(value = "/getLongDesc", method = RequestMethod.POST)
+	public @ResponseBody
+	String getLongDescription(@RequestParam String id) {
+		String desc = serviceGood.getLongDescription(Integer.parseInt(id));
+		//System.out.println("GoodController.getLongDescription()"+desc);
+		return desc;
 	}
 
+	@RequestMapping(value = "/changeValue", method = RequestMethod.POST)
+	public @ResponseBody
+	String saveChange(@RequestParam String id, @RequestParam String value) {
+		//System.out.println(id+" "+value);
+		String ret = "1";
+		int identif = Integer.parseInt(id);
+		Good good = new Good();
+		good.setId(identif / 100);
+
+		if (identif % 100 == 2)
+			serviceGood.updateGoodName(identif / 100, value);
+		if (identif % 100 == 3)
+			serviceGood.updateGoodManufacturer(identif / 100,
+					Integer.parseInt(value));
+		if (identif % 100 == 4) {
+			Price price = new Price(identif / 100, Float.parseFloat(value));
+			servicePrice.addPrice(price);
+		}
+		if (identif % 100 == 5) {
+			Price price = new Price(identif / 100, Float.parseFloat(value));
+			Float newVal = servicePrice.addPriceSum(price);
+			ret = newVal.toString();
+		}
+		if (identif % 100 == 6)
+			serviceGood
+					.updateGoodAmount(identif / 100, Float.parseFloat(value));
+		if (identif % 100 == 7) {
+			Float newVal = serviceGood.updateGoodAmountSum(identif / 100,
+					Float.parseFloat(value));
+			ret = newVal.toString();
+		}
+		if (identif % 100 == 8)
+			serviceGood.updateGoodUnit(identif / 100, Integer.parseInt(value));
+		
+		if (identif % 100 == 14)
+			serviceGood.updateGoodCategory(identif / 100, Integer.parseInt(value));
+		
+		if (identif % 100 == 15) serviceGood.updateGoodDescription(identif / 100, value);
+
+		if (identif % 100 == 16) serviceGood.setLongDescription(identif / 100, value);
+		
+		return ret;
+	}
 }

@@ -6,6 +6,10 @@ import com.algo.webshop.common.domain.Good;
 public class GoodFull extends Good {
 	private float price;
 	private String longDescription;
+	
+	public GoodFull() {
+		
+	}
 
 	public GoodFull(Good good, float price) {
 		super(good.getId(), good.getName(), good.getDescription(), good
