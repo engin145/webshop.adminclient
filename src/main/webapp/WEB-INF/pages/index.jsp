@@ -17,7 +17,7 @@
 			<td width="21%"><a href="good">Товары</a></td>
 			<td width="21%"><a href="order">Заказы</a></td>
 			<td width="21%"><a href="category">Категории</a></td>
-			<td width="21%"><a href="client">Клиенты</a></td>
+			<td width="21%"><a href="user">Клиенты</a></td>
 			<td width="21%"><a href="manager">Менеджеры</a></td>
 		</tr>
 	</table>

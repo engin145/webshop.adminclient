@@ -9,7 +9,7 @@
 	<http pattern="/css/**" security="none" />
 	
 	<http auto-config="true">
-		<intercept-url pattern="/**" access="ROLE_ADMIN" />
+		<!-- <intercept-url pattern="/**" access="ROLE_ADMIN" /> -->
 	</http>	
 	
 	<authentication-manager>
