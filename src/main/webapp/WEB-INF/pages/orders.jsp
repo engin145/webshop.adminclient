@@ -34,6 +34,9 @@ td {
 
 </style>
 <body>
+	<p>
+		<a href="index">На главную</a>
+	</p>
 	<c:choose>
 		<c:when test="${not empty orderList}">
 			<table>
@@ -52,7 +55,7 @@ td {
 										"yyyy-MM-dd hh.mm.ss");
 								String time = formatter.format(order.getDate_order()
 										.getTime());
-								out.println("<tr><td><a href=fullOrder?order="+order.getNumber()+">" + order.getNumber()
+								out.println("<tr><td><a href=orderFull?order="+order.getNumber()+">" + order.getNumber()
 										+ "</a></td><td>" + order.getUserName()
 										+ "</td><td>" + time + "</td>");
 								if (order.getDate_pay() != null) {

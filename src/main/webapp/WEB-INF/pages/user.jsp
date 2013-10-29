@@ -38,8 +38,7 @@ tbody .user:hover {
 
 <script type="text/javascript">
 	function getInfo(id) {
-		//document.location.href = "userOrders?id="+id;
-		document.location.href = "orderFull?num="+id;
+		document.location.href = "ordersForUser?id="+id;
 	}
 </script>
 

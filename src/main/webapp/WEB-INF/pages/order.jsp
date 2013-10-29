@@ -8,12 +8,15 @@
 <title>Заказы</title>
 </head>
 <body>
+	<p>
+		<a href="index">На главную</a>
+	</p>
 	<a href="<c:url value="/j_spring_security_logout"/>">Logout</a>
 	<form action="orders" method="post"
 		style="margin: 0 auto; padding: 30px; width: 300px; border: 1px solid #000;">
 		<p>
 			Заказы по дате: <select name="date">
-				<option selected="selected" value="1">За последний день</option>
+				<option selected="selected" value="1">За последний месяц</option>
 				<option value="2">Все заказы</option>
 			</select>
 		</p>
@@ -24,7 +27,7 @@
 			</select>
 
 		</p>
-		
+
 		<p>
 			Отменены: <select name="cansel_status">
 				<option selected="selected" value="1">Не отменены</option>

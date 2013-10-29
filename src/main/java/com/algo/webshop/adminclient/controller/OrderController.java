@@ -46,22 +46,23 @@ public class OrderController {
 	public void setOrderService(@Qualifier("orderService") IOrder service) {
 		this.serviceOrder = service;
 	}
-	
+
 	@Autowired
 	public void setOrderService(@Qualifier("userService") IUser service) {
 		this.serviceUser = service;
 	}
-	
+
 	@Autowired
-	public void setOrderGoodService(@Qualifier("orderGoodService") IOrderGood service) {
+	public void setOrderGoodService(
+			@Qualifier("orderGoodService") IOrderGood service) {
 		this.serviceOrderGood = service;
 	}
-	
+
 	@Autowired
 	public void setPriceService(@Qualifier("priceService") IPrice service) {
 		this.servicePrice = service;
 	}
-	
+
 	@Autowired
 	public void setGoodService(@Qualifier("goodService") IGood service) {
 		this.serviceGood = service;
@@ -98,10 +99,27 @@ public class OrderController {
 		model.addAttribute("orderList", orderList);
 		return "orders";
 	}
-	
+
+	@RequestMapping(value = "/ordersForUser", method = RequestMethod.GET)
+	public String showOrdersForUser(Model model, @RequestParam("id") int id) {
+		List<Order> orders = serviceOrder.getOrdersByUserId(id);
+		List<OrderFull> orderList = new LinkedList<OrderFull>();
+		for (Order order : orders) {
+			int userId = order.getUsers_id();
+			String userName = "";
+			if (userId != 0) {
+				userName = serviceUser.getUserName(userId);
+			}
+			orderList.add(new OrderFull(order, userName));
+
+		}
+		model.addAttribute("orderList", orderList);
+		return "orders";
+	}
+
 	@RequestMapping(value = "/orderFull", method = RequestMethod.GET)
-	public ModelAndView showOrderFull(Model model, @RequestParam("num") String num) {
-		num = "0409-001";
+	public ModelAndView showOrderFull(Model model,
+			@RequestParam("order") String num) {
 		int userId;
 		String userName;
 		String date_order;
@@ -113,39 +131,40 @@ public class OrderController {
 		List<Position> positionList;
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
 		Order order = serviceOrder.getOrderByNumber(num);
-		
+
 		model.addAttribute("num", num);
-		
+
 		try {
-		userId = order.getUsers_id();
-		userName = serviceUser.getUserName(userId);
+			userId = order.getUsers_id();
+			userName = serviceUser.getUserName(userId);
 		} catch (Exception e) {
 			userName = "No name";
 		}
 		model.addAttribute("userName", userName);
-		
-		date_order=formatter.format(order.getDate_order().getTime());
+
+		date_order = formatter.format(order.getDate_order().getTime());
 		model.addAttribute("date", date_order);
-		
+
 		try {
-		date_pay=formatter.format(order.getDate_pay().getTime());
+			date_pay = formatter.format(order.getDate_pay().getTime());
 		} catch (Exception e) {
-			date_pay="Не оплачено";
+			date_pay = "Не оплачено";
 		}
 		model.addAttribute("pay", date_pay);
-		
+
 		try {
-		date_release=formatter.format(order.getDate_release().getTime());
+			date_release = formatter.format(order.getDate_release().getTime());
 		} catch (Exception e) {
-			date_release="Не отпущено";
+			date_release = "Не отпущено";
 		}
 		model.addAttribute("release", date_release);
-		
-		positionList=serviceOrderGood.getGoodList(order.getId());
-		
+
+		positionList = serviceOrderGood.getGoodList(order.getId());
+
 		for (Position pos : positionList) {
 			Basket basket = new Basket();
-			Price price = servicePrice.getActualDatePrice(order.getDate_order(), pos.getGoods_id());
+			Price price = servicePrice.getActualDatePrice(
+					order.getDate_order(), pos.getGoods_id());
 			Good good = serviceGood.getGood(pos.getGoods_id());
 			basket.setGoodId(pos.getGoods_id());
 			basket.setNameGood(good.getName());
@@ -155,21 +174,25 @@ public class OrderController {
 		}
 		Positions positions = new Positions();
 		positions.setBasketList(basketList);
-		
+
 		model.addAttribute("position", positions);
-		
+
 		String cansel = "";
-		cansel_status=order.getCansel_status();
-		if (cansel_status==2) cansel="Отменён пользователем";
-		if (cansel_status==3) cansel="Отменён сервером";
+		cansel_status = order.getCansel_status();
+		if (cansel_status == 2)
+			cansel = "Отменён пользователем";
+		if (cansel_status == 3)
+			cansel = "Отменён сервером";
 		model.addAttribute("cansel", cansel);
-		
+
 		String confirm;
-		confirm_status=order.getConfirm_status();
-		if (confirm_status==1) confirm="Заказ подтверждён";
-		else confirm="Заказ не подтверждён";
+		confirm_status = order.getConfirm_status();
+		if (confirm_status == 1)
+			confirm = "Заказ подтверждён";
+		else
+			confirm = "Заказ не подтверждён";
 		model.addAttribute("confirm", confirm);
-		
-		return new ModelAndView ("orderFull");
+
+		return new ModelAndView("orderFull");
 	}
 }
