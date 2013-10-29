@@ -2,6 +2,8 @@ package com.algo.webshop.adminclient.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.algo.webshop.adminclient.order.Positions;
 import com.algo.webshop.common.domain.Basket;
 import com.algo.webshop.common.domain.Good;
+import com.algo.webshop.adminclient.good.OrderFull;
 import com.algo.webshop.common.domain.Order;
 import com.algo.webshop.common.domain.Position;
 import com.algo.webshop.common.domain.Price;
@@ -33,6 +36,11 @@ public class OrderController {
 	private IOrderGood serviceOrderGood;
 	private IPrice servicePrice;
 	private IGood serviceGood;
+
+	@Autowired
+	public void setUserService(@Qualifier("userService") IUser service) {
+		this.serviceUser = service;
+	}
 
 	@Autowired
 	public void setOrderService(@Qualifier("orderService") IOrder service) {
@@ -64,12 +72,30 @@ public class OrderController {
 		return "order";
 	}
 
-	@RequestMapping(value = "/orders")
+	@RequestMapping(value = "/orders", method = RequestMethod.POST)
 	public String showOrders(Model model, @RequestParam("date") int date,
 			@RequestParam("confirm_status") int confirmStatus,
 			@RequestParam("cansel_status") int canselStatus) {
-		List<Order> list = serviceOrder.getOrders(confirmStatus, canselStatus);
-		System.out.println(list);
+		List<Order> orders;
+		if (date == 1) {
+			Calendar dateM = Calendar.getInstance();
+			dateM.add(Calendar.MONTH, -1);
+			orders = serviceOrder.getOrdersList(confirmStatus, canselStatus,
+					dateM);
+		} else {
+			orders = serviceOrder.getOrders(confirmStatus, canselStatus);
+		}
+		List<OrderFull> orderList = new LinkedList<OrderFull>();
+		for (Order order : orders) {
+			int userId = order.getUsers_id();
+			String userName = "";
+			if (userId != 0) {
+				userName = serviceUser.getUserName(userId);
+			}
+			orderList.add(new OrderFull(order, userName));
+
+		}
+		model.addAttribute("orderList", orderList);
 		return "orders";
 	}
 	
